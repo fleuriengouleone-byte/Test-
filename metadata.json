@@ -1,0 +1,6 @@
+{
+  "name": "Google Cloud Run Console",
+  "description": "Console de déploiement Google Cloud Run pour lancer des images de conteneurs Docker, configurer des services serverless et connecter des applications WebSocket.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

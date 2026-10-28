@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Fonction de vérification d'authentification administrateur
+    function isAdmin() {
+      return request.auth != null && (
+        request.auth.token.admin == true ||
+        request.auth.token.role == 'administrator'
+      );
+    }
+
+    // Collection des comptes VLESS / VMess
+    // Strictement restreinte aux administrateurs authentifiés
+    match /accounts/{accountId} {
+      allow read, write: if isAdmin();
+    }
+
+    // Collection des paramètres du moteur
+    match /settings/{settingId} {
+      allow read, write: if isAdmin();
+    }
+
+    // Collection des journaux d'audit (Lecture admin, écriture contrôlée)
+    match /audit_logs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin();
+      allow update, delete: if false; // Les journaux d'audit sont immuables
+    }
+
+    // Collection des administrateurs autorisés
+    match /admins/{adminId} {
+      allow read, write: if isAdmin();
+    }
+  }
+}
